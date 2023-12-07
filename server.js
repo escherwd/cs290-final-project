@@ -1,5 +1,6 @@
 
 var express = require('express')
+var fabric = require('fabric').fabric;
 var port = process.env.PORT || 3000
 
 // Create the express server
