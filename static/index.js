@@ -27,12 +27,12 @@ var current_object_index = null;
 
 // testing 
 
-canvas.style.border = '5px solid red'; // so its visible
+// canvas.style.border = '5px solid red'; // so its visible
 
 var canvas_width = canvas.width * .3;
 var canvas_height = canvas.height * .3;
-var offset_x;
-var offset_y;
+var offset_x = 0;
+var offset_y = 0;
 
 getOffset();
 window.onscroll = getOffset;
