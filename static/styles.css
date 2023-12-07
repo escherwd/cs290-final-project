@@ -35,6 +35,28 @@ body {
     margin-bottom: 0;
 }
 
+.toolbar-button {
+    box-sizing: border-box;
+    width: 10%;
+    margin-top: 10px;
+    margin-left: 10px;
+    color: white;
+    background-color: blue;
+    font-size: 24px;
+    font-weight: 75;
+    border-top-right-radius: 5%;
+    border-top-left-radius: 5%;
+    border-bottom-right-radius: 5%;
+    border-bottom-left-radius: 5%;
+  }
+
+.toolbar-button:hover {
+    color: black;
+    background-color: lightblue;
+    border-color: black;
+    cursor: pointer;
+}
+
 .content {
     flex-grow: 1;
     display: flex;
