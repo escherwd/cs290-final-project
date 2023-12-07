@@ -11,6 +11,28 @@ fabric.Object.prototype.transparentCorners = false;
 fabric.Object.prototype.cornerColor = 'blue';
 fabric.Object.prototype.cornerStyle = 'circle';
 
+var grid = 50;
+
+// create grid
+
+var canvasWidth = canvas.getWidth();
+var canvasHeight = canvas.getHeight();
+console.log("==CanvasWidth:", canvasWidth)
+console.log("==CanvasHeight:", canvasHeight)
+
+for (var i = 0; i < (canvasWidth / grid); i++) {
+  canvas.add(new fabric.Line([i * grid, 0, i * grid, canvasHeight], {
+    stroke: '#ccc',
+    selectable: false
+  }));
+}
+for (var i = 0; i < (canvasHeight / grid); i++) {
+  canvas.add(new fabric.Line([0, i * grid, canvasWidth, i * grid], {
+    stroke: '#ccc',
+    selectable: false
+  }))
+}
+
 function Add() {
 var rect = new fabric.Rect({
   left: 100,
