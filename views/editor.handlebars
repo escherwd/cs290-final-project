@@ -22,55 +22,13 @@
         </div>
 
     </div>
-    <div class="toolbar-wrapper">
-        <div class="toolbar">
-            <div class="toolbar-title sideways">
-                <span>Tools</span>
-            </div>
-            <button class="toolbar-button">
-                <img src="/images/icons8-enlarge-48.png" alt="">
-                <span>Enlarge</span>
-            </button>
-            <button class="toolbar-button no-border">
-                <img src="/images/icons8-compress-48.png" alt="">
-                <span>Shrink</span>
-            </button>
-            <div style="flex: 1"></div>
-            <button class="toolbar-button">
-                <img src="/images/icons8-bring-forward-48.png" alt="">
-                <span>Bring<br>Forward</span>
-            </button>
-            <button class="toolbar-button">
-                <img src="/images/icons8-send-backward-48.png" alt="">
-                <span>Send<br>Backward</span>
-            </button>
-            <button class="toolbar-button no-border">
-                <img src="/images/icons8-lock-48.png" alt="">
-                <span>Lock</span>
-            </button>
-            <div style="flex: 1"></div>
-            <button class="toolbar-button">
-                <img src="/images/icons8-delete-48.png" alt="">
-                <span>Delete</span>
-            </button>
-        </div>
-    </div>
+    
+    {{> toolbar}}
+    
     <main class="content">
-        <div class="pallette-wrapper">
-            <div class="pallette">
-                <div class="toolbar-title">
-                    Layout
-                </div>
-                <div class="pallette-grid">
-                    {{#each layoutbuttons}}
-                        {{> layoutbuttons}}
-                    {{/each}}
-                </div>
-                <div class="toolbar-title border-top">
-                    Objects
-                </div>
-            </div>
-        </div>
+    
+        {{> pallete}}
+    
         <div class="canvas-container">
             <!-- <div class="canvas-wrapper"> -->
             <div id="canvas-bg"></div>
