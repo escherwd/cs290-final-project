@@ -5,11 +5,6 @@
         "description": "Bed"
     },
     {
-        "id": "create-door",
-        "url": "/SVGs/create-door.svg",
-        "description": "Door"
-    },
-    {
         "id": "create-couch",
         "url": "/SVGs/create-couch.svg",
         "description": "Couch"
@@ -38,5 +33,20 @@
         "id": "create-shower",
         "url": "/SVGs/create-shower.svg",
         "description": "Shower"
+    },
+    {
+        "id": "create-dumbell",
+        "url": "/SVGs/create-dumbell.svg",
+        "description": "Dumbell"
+    },
+    {
+        "id": "create-car",
+        "url": "/SVGs/create-car.svg",
+        "description": "Car"
+    },
+    {
+        "id": "create-pool-table",
+        "url": "/SVGs/create-pool-table.svg",
+        "description": "Pool Table"
     }
 ]

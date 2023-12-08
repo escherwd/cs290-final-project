@@ -13,5 +13,10 @@
     "url": "/images/icons8-window-48.png",
     "id": "create-window",
     "description": "Window"
+    },
+    {
+    "url":"/images/icons8-square-48.png",
+    "id": "create-floor",
+    "description": "Floor"
     }
 ]
