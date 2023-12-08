@@ -28,7 +28,7 @@ All scalable, dependent on user's click and drag
 
 function createObject(event){
     var id = event.target.id
-    fabric.loadSVGFromURL('./SVGs/' + id + '.svg' ,function(object, options ) {
+    fabric.loadSVGFromURL('/SVGs/' + id + '.svg' ,function(object, options ) {
         var object = fabric.util.groupSVGElements(object, options);
         console.log(object);
         canvas.add(object);
@@ -94,4 +94,3 @@ function generatePDF() {
 }
 
 /* *********************************          Work Area Implementation           ******************************* */ 
-
