@@ -23,6 +23,9 @@ saveCommitButton.addEventListener('click', async (event) => {
         return
     }
 
+    // Delete weird characters
+    name = name.replace(/[/\\?%*:|"<>]/g, '-')
+
     try {
         // Post the data
         const response = await fetch(`/project/${name}/save`, {
