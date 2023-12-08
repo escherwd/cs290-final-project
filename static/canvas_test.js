@@ -226,7 +226,10 @@ canvas.on('mouse:up', (e) => {
     console.log("==firstWall: ", firstWall)
     if (firstWall === true){
       prevCircle = null;
-    }
+    } 
+
+    // Do I just need to make it so you can only ever have one set of lines
+    // Like you can't connect more lines you just have to add to what you already have?
 
     // drawEndpoint(e);
     var x = e.pointer.x;
@@ -238,10 +241,13 @@ canvas.on('mouse:up', (e) => {
     if(e.target != null && e.target.type === 'circle'){
       // var line = linkCircle(e, prevCircle, e.target);
       // e.target.lineTo = line;
-      var line = linkCircle(e, e.target, prevCircle);
+      // var line = linkCircle(e, e.target, prevCircle);
       if (firstWall === true){
-        prevCircle = e.target;
+        // var line = linkCircle(e, e.target, circle);
+        // prevCircle = e.target;
+        // prevCircle.lineTo = prevCircle.lineFrom;
       } else {
+        var line = linkCircle(e, e.target, prevCircle);
         e.target.lineTo = line;
         prevCircle.lineFrom = line; 
       }
@@ -251,6 +257,7 @@ canvas.on('mouse:up', (e) => {
       circle.lineTo = line; 
       prevCircle.lineFrom = line;
       prevCircle = circle; 
+      // firstWall = false;
       canvas.add(circle);
       // var line = linkCircle(e, circle, prevCircle);
       // circle.lineTo = line;
