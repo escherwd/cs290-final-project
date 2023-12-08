@@ -43,6 +43,24 @@ objects.push({x: 200, y:50, width: 200, height: 200, color: 'red'});
 objects.push({x: 200, y:50, width: 200, height: 200, color: 'blue'});
 
 
+//Event Listeners for toolbar
+var enlargeButton = document.getElementById('tool-enlarge-button');
+EnlargeButton.addEventListener('click', enlarge);
+
+var shrinkButton = document.getElementById('tool-enlarge-button');
+ShrinkButton.addEventListener('click', shrink);
+
+var bringForwardButton = document.getElementById('tool-bring-forward-button');
+bringForwardButton.addEventListener('click', bringForward);
+
+var sendBackwardButton = document.getElementById('tool-send-backward-button');
+sendBackwardButton.addEventListener('click', sendBackward);
+
+var lockButton = document.getElementById('tool-lock-button');
+lockButton.addEventListener('click', lock);
+
+var eraseButton = document.getElementById('tool-delete-button');
+eraseButton.addEventListener('click', deleteButton);
 
 /* *********************************              Base Functionality             ******************************* */ 
 
@@ -84,7 +102,11 @@ function insertDoor() {
 
 }
 
-function editSize() {
+function enlarge() {
+
+}
+
+function shrink() {
 
 }
 
@@ -92,6 +114,17 @@ function deleteButton() {
 
 }
 
+function bringForward() {
+
+}
+
+function sendBackward() {
+
+}
+
+function lock() {
+
+}
 
 /* *********************************      Objects to Place Implementation       ******************************* */ 
 
