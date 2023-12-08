@@ -374,3 +374,78 @@ body {
 .home-new:hover {
     background: #15803d;
 }
+
+.save-backdrop {
+    position: fixed;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #00000080;
+}
+
+.save-modal {
+    /* padding: 2rem; */
+    background: white;
+    max-width: 20rem;
+    margin: 2rem auto;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.save-modal-content {
+    padding: 1rem;
+    position: relative;
+}
+
+.save-modal-content label {
+    display: block;
+    color: #6b7280;
+    font-size: 8pt;
+    letter-spacing: 0.1ch;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.save-modal-content input {
+    padding: 8px;
+    border: 1px solid var(--border);
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    width: calc(100% - 16px);
+}
+
+.save-modal-actions {
+    display: flex;
+    justify-content: end;
+    margin-top: 16px;
+}
+
+.pill-button-sm {
+    border: none;
+    padding: 8px 16px;
+    font-size: 11pt;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 100ms linear;
+    cursor: pointer;
+    border-radius: 8px;
+    background: #e5e7eb;
+}
+
+.pill-button-sm:hover {
+    background: #d1d5db;
+}
+
+.save-modal-save {
+    color: white;
+    background: #16a34a;
+}
+
+.save-modal-save:hover {
+    background: #15803d;
+}
