@@ -37,7 +37,8 @@ body {
 
 .toolbar-button {
     box-sizing: border-box;
-    width: 10%;
+    width: 100px;
+    height: 75%;
     margin-top: 10px;
     margin-left: 10px;
     color: white;
