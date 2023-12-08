@@ -1,50 +1,71 @@
 
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
+const hb_adapter = require('express-handlebars');
 var express = require('express')
 var port = process.env.PORT || 3000
 
 // Create the express server
 var app = express()
 // Use the static middleware
-app.use(express.static('static'))
+app.use(express.static('static', { index: false }))
 app.use(express.json());
+// Use handlebars
+app.engine('handlebars', hb_adapter.engine())
+app.set('view engine', 'handlebars')
+app.set('views', './views')
 
-app.post('/save', function (req, res) {
-    let name = req.body['name']
-    let data = req.body['data']
 
+// Save a project to file. Will overwrite existing data.
+app.post('/project/:name/save', function (req, res) {
+
+    // Grab the name, data, and path to save at
+    let name = req.params.name
+    let data = JSON.stringify(req.body)
     let file = path.join(__dirname, 'storage', `${name}.json`);
 
-    fs.writeFileSync(file, JSON.stringify(data))
+    // Write to file (overwrite existing data)
+    fs.writeFileSync(file, data)
     res.end()
 })
 
-app.get('/files', function (req, res) {
-    let name = req.body['name']
-    let data = req.body['data']
+async function getProjects() {
+    let dir = path.join(__dirname, 'storage')
+    return (await fs.readdir(dir)).map(file => file.replace('.json', ''))
+}
 
-    let files = fs.readdirSync(path.join(__dirname, 'storage'))
-        .map(file => file.replace('.json', ''))
-
-    res.send({ files: files })
-})
-
-app.get('/data', function (req, res) {
-    let name = req.query.name
-
+async function getProjectData(name) {
     let file = path.join(__dirname, 'storage', `${name}.json`)
+    return await fs.readFile(file)
+}
 
-    if (!fs.existsSync(file)) {
-        res.status(404).send({ 'error': 'File not found' })
-        return
+app.get('/project/:name', async function (req, res) {
+    try {
+        let data = await getProjectData(req.params.name);
+        res.render('editor', {
+            layout: 'editor',
+            data: data
+        })
+    } catch (err) {
+        res.render('404')
     }
-
-    let data = fs.readFileSync(file)
-
-    res.send(JSON.parse(data))
 })
 
+app.get('/new', async function (req, res) {
+    res.render('editor', {
+        layout: 'editor',
+    })
+})
+
+app.get('/', async function (req, res) {
+    res.render('home', {
+        projects: await getProjects()
+    })
+})
+
+app.get('*', function (req, res) {
+    res.render('404')
+})
 
 // Listen on port
 app.listen(port, function () {

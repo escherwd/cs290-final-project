@@ -1,0 +1,31 @@
+<div>
+
+    <div class="home-content">
+        <div class="home-title">
+            <div id="app-title" class="ui-shadow">
+                <img src="/images/icons8-cube-36.png" alt="">
+                <span>
+                    Layout Planner
+                </span>
+                <!-- <div id="pro-badge">Pro</div> -->
+            </div>
+        </div>
+        <div class="pallette home-list">
+            <div class="toolbar-title">My Projects</div>
+            {{#each projects}}
+            <a class="home-project" href="/project/{{.}}">{{ . }}</a>
+            {{/each}}
+        </div>
+        <a class="home-new" href="/new">New Project</a>
+    </div>
+
+
+
+    <br>
+
+    <div>
+        
+    </div>
+
+
+</div>

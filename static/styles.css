@@ -21,8 +21,8 @@ body {
 #app-title {
 
     width: calc(200px - 8px);
-    margin-right: 8px;
 
+    text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -81,6 +81,7 @@ body {
     background: white;
     border-radius: 12px;
     overflow: hidden;
+    margin-left: 8px;
 }
 
 .menu-item {
@@ -312,5 +313,64 @@ body {
 }
 
 .ui-shadow {
-    /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); */
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.home-content {
+
+    padding: 2rem 16px;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    gap: 2rem;
+}
+
+.home-title {
+    height: 50px;
+    display: flex;
+}
+
+.home-list {
+    max-width: 20rem;
+    width: 100%;
+    min-height: 15rem;
+    overflow-y: scroll;
+}
+
+.home-project {
+    width: 100%;
+    text-align: left;
+    padding: 1rem 1rem;
+    display: block;
+    border-bottom: 1px dashed var(--border);
+    text-decoration: none;
+    color: black;
+}
+
+/* .home-project:last-of-type {
+    border-bottom: none;
+} */
+
+.home-project:hover {
+    /* text-decoration: underline; */
+    background-color: var(--hover);
+}
+
+.home-new {
+    padding: 12px 1rem;
+    max-width: 12rem;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 500;
+    color: white;
+    border-radius: 12px;
+    background: #16a34a;
+    transition: all 100ms linear;
+}
+
+.home-new:hover {
+    background: #15803d;
 }
