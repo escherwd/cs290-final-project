@@ -31,10 +31,15 @@ body {
     column-gap: 6px;
     background: linear-gradient(-30deg, #0F2027, #203A43);
     border-radius: 12px;
+    transition: all 150ms linear;
 
     user-select: none;
 
     color: white;
+}
+
+#app-title.grow:hover {
+    transform: scale(1.05);
 }
 
 #app-title>img {
