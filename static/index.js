@@ -32,7 +32,6 @@ function createObject(event){
     var id = event.target.id
     console.log("== event target id:" + id)
     fabric.loadSVGFromURL('/SVGs/' + id + '.svg' ,function(object, options ) {
-        options
         var object = fabric.util.groupSVGElements(object, options);
         canvas.add(object);
     })
