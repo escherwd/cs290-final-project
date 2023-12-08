@@ -26,7 +26,7 @@ app.set('views', './views')
 
 
 // Save a project to file. Will overwrite existing data.
-app.post('/project/:name/save', function (req, res) {
+app.post('/project/:name/save', async function (req, res) {
 
     // Grab the name, data, and path to save at
     let name = req.params.name
@@ -34,7 +34,7 @@ app.post('/project/:name/save', function (req, res) {
     let file = path.join(__dirname, 'storage', `${name}.json`);
 
     // Write to file (overwrite existing data)
-    fs.writeFileSync(file, data)
+    await fs.writeFile(file, data)
     res.end()
 })
 
@@ -53,7 +53,8 @@ app.get('/project/:name', async function (req, res) {
         let data = await getProjectData(req.params.name);
         res.render('editor', {
             layout: 'editor',
-            data: data
+            data: data,
+            name: req.params.name
         })
     } catch (err) {
         res.render('404')

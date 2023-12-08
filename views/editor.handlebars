@@ -2,6 +2,7 @@
     // save_data will be populated by handlebars and can be used in other javascript files.
     // Contains the latest save present when the page was loaded.
     const save_data = `{{{ data }}}`
+    const save_name = `{{{ name }}}`
 </script>
 
 <div class="page-wrapper">
@@ -14,7 +15,7 @@
             <!-- <div id="pro-badge">Pro</div> -->
         </a>
         <div class="menu-bar">
-            <button class="menu-item">Save</button>
+            <button id="menu-save-button" class="menu-item">Save</button>
             <button class="menu-item">Print</button>
             <button class="menu-item">Export as PDF</button>
             <button class="menu-item">Export as JPEG</button>
