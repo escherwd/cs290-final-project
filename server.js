@@ -3,10 +3,19 @@ const fs = require('fs/promises');
 const path = require('path');
 const hb_adapter = require('express-handlebars');
 var express = require('express')
-var port = process.env.PORT || 3000
+var exphbs = require("express-handlebars")
+var fabric = require("fabric").fabric;
+
 
 // Create the express server
 var app = express()
+var port = process.env.PORT || 3000 // PORT
+
+
+
+//app.engine("handlebars", exphbs.engine( { defaultLayout: "main"}));
+//app.set("view engine", "handlebars");
+
 // Use the static middleware
 app.use(express.static('static', { index: false }))
 app.use(express.json());
