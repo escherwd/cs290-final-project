@@ -1,14 +1,14 @@
 [
     {
-    "url": "images/icons8-square-48.png",
+    "url": "/images/icons8-square-48.png",
     "description": "Wall"
     },
     {
-    "url": "images/icons8-door-48.png",
+    "url": "/images/icons8-door-48.png",
     "description": "Door"
     },
     {
-    "url": "images/icons8-window-48.png",
+    "url": "/images/icons8-window-48.png",
     "description": "Window"
     }
 ]

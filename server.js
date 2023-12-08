@@ -56,7 +56,9 @@ app.get('/project/:name', async function (req, res) {
         res.render('editor', {
             layout: 'editor',
             data: data,
-            name: req.params.name
+            name: req.params.name,
+            layoutbuttons: layoutData, // passes array of data for layout buttons 
+            objects: objectsData
         })
     } catch (err) {
         res.render('404')

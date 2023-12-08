@@ -6,11 +6,13 @@ fabric.Object.prototype.transparentCorners = false; // no transparent corners
 fabric.Object.prototype.cornerStyle = "circle"; // circle corners so it's visible to users
 fabric.Object.prototype.cornerColor = "blue"; // circles are blue
 
-
-
-
-var createDoorButton = document.getElementById("create-door-button")
-createDoorButton.addEventListener('click' , createObject)
+const palletteElements = document.querySelectorAll(".pallette-grid"); // gets all elements w/ buttons that are rendered
+for(const element of palletteElements){
+    console.log("== palletteElements:" + element);
+    for(const child of element.children) {
+        child.addEventListener("click", createObject);
+    }
+}
 
 /* *********************************              Base Functionality             ******************************* */ 
 
