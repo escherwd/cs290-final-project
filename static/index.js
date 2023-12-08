@@ -27,6 +27,7 @@ All scalable, dependent on user's click and drag
 // need buttons in tool bar
 
 function createObject(event){
+    console.log("== button press detected \n == event target ID: " + event.target.id)
     var id = event.target.id
     fabric.loadSVGFromURL('/SVGs/' + id + '.svg' ,function(object, options ) {
         var object = fabric.util.groupSVGElements(object, options);

@@ -1,0 +1,42 @@
+[
+    {
+        "id": "create-bed",
+        "url": "/SVGs/create-bed.svg",
+        "description": "Bed"
+    },
+    {
+        "id": "create-door",
+        "url": "/SVGs/create-door.svg",
+        "description": "Door"
+    },
+    {
+        "id": "create-couch",
+        "url": "/SVGs/create-couch.svg",
+        "description": "Couch"
+    },
+    {
+        "id": "create-fridge",
+        "url": "/SVGs/create-fridge.svg",
+        "description": "Fridge"
+    },
+    {
+        "id": "create-rug",
+        "url": "/SVGs/create-rug.svg",
+        "description": "Rug"
+    },
+    {
+        "id": "create-sofa",
+        "url": "/SVGs/create-sofa.svg",
+        "description": "Sofa"
+    },
+    {
+        "id": "create-toilet",
+        "url": "/SVGs/create-toilet.svg",
+        "description": "Toilet"
+    },
+    {
+        "id": "create-shower",
+        "url": "/SVGs/create-shower.svg",
+        "description": "Shower"
+    }
+]

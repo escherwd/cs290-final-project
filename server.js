@@ -2,6 +2,8 @@
 const fs = require('fs/promises');
 const path = require('path');
 const hb_adapter = require('express-handlebars');
+const layoutData = require('./layoutdata.json'); // array of layout button data
+var objectsData = require('./objectsdata.json') // array of object buttons data
 var express = require('express')
 var exphbs = require("express-handlebars")
 var fabric = require("fabric").fabric;
@@ -53,7 +55,9 @@ app.get('/project/:name', async function (req, res) {
         let data = await getProjectData(req.params.name);
         res.render('editor', {
             layout: 'editor',
-            data: data
+            data: data ,
+            layoutbuttons: layoutData, // passes array of data for layout buttons 
+            objects: objectsData
         })
     } catch (err) {
         res.render('404')
@@ -63,6 +67,8 @@ app.get('/project/:name', async function (req, res) {
 app.get('/new', async function (req, res) {
     res.render('editor', {
         layout: 'editor',
+        layoutbuttons: layoutData,
+        objects: objectsData
     })
 })
 
