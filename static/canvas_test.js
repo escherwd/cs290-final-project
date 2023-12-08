@@ -2,10 +2,12 @@
 // var fabric = require('fabric')
 var canvas = this.__canvas = new fabric.Canvas('c');
 canvas.preserveObjectStacking = true;
+canvas.selection = false; 
 // create a rect object
 var deleteIcon = "data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='595.275px' height='595.275px' viewBox='200 215 230 470' xml:space='preserve'%3E%3Ccircle style='fill:%23F44336;' cx='299.76' cy='439.067' r='218.516'/%3E%3Cg%3E%3Crect x='267.162' y='307.978' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -222.6202 340.6915)' style='fill:white;' width='65.545' height='262.18'/%3E%3Crect x='266.988' y='308.153' transform='matrix(0.7071 0.7071 -0.7071 0.7071 398.3889 -83.3116)' style='fill:white;' width='65.544' height='262.179'/%3E%3C/g%3E%3C/svg%3E";
 
 var ppi = 5 // Pixles per inch
+var dimTextSize = 10; 
 
 var img = document.createElement('img');
 img.src = deleteIcon;
@@ -49,6 +51,32 @@ function createGrid(){
 }
 createGrid();
 
+function giveDimensions(object){
+  var width = object.getScaledWidth();
+  var height = object.getScaledHeight();
+
+  var widthDim = new fabric.Text(width.toString(), {
+    fontSize: dimTextSize,
+    left: object.left + width/2,
+    top: object.top + height,
+  })
+
+  object.widthDim = widthDim;
+  canvas.add(widthDim);
+
+}
+
+function updateDimensions(object){
+  var width = object.getScaledWidth();
+  var height = object.getScaledHeight(); 
+  width = width.toString();
+  object.widthDim.set({
+    text: width,
+    left: object.left + width/2,
+    top: object.top + height,
+  })
+}
+
 function Add() {
 var rect = new fabric.Rect({
   left: 100,
@@ -60,6 +88,8 @@ var rect = new fabric.Rect({
   stroke: 'lightgreen',
   strokeWidth: 9,
 });
+
+giveDimensions(rect);
 
 canvas.add(rect);
 canvas.setActiveObject(rect);
@@ -140,14 +170,19 @@ function lineMidpoint(line){
   return [x, y];
 }
 function lineLength(line){
-  var length = (((line.x1 + line.x2)/2)^2+((line.y1 + line.y2)/2)^2)^0.5
+  var difX = Math.abs(line.x1 - line.x2);
+  var difY = Math.abs(line.y1 - line.y2); 
+  console.log("=difX: ", difX, difX**2, "=difY: ", difY)
+  var length = Math.sqrt(difX**2 + difY**2)
+  console.log("==Length: ", length);
   length = length/ppi; 
   return length;
 }
 
 function updateDimPos(line){
   var midpoint = lineMidpoint(line);
-  var length = lineLength(line).toString();
+  var length = Math.round(lineLength(line));
+  length = length.toString();
   length = length + '"'
   line.dim.set({
     left: midpoint[0],
@@ -178,7 +213,7 @@ function linkCircle(e, circle, prevCircle){
   console.log('==Length: ', length);
 
   var dim = new fabric.Text(length.toString(), {
-    fontSize: 10, 
+    fontSize: dimTextSize, 
     left: midPoint[0],
     top: midPoint[1],
     selectable: false,
@@ -300,9 +335,20 @@ canvas.on('object:moving', (e) => {
       o.lineFrom.set({'x1': o.left + radius, 'y1': o.top + radius})
       updateDimPos(o.lineFrom)
     }
+  } else if (o.type != null){
+    // updateDimensions(o); 
   }
 }
 )
+
+canvas.on('object:scaling', (e) => {
+  var o = e.target; 
+  // updateDimensions(o);
+})
+
+canvas.on('object:rotating', (e) => {
+  // updateDimensions(e.target);
+})
 
 function clearAll(){
   canvas.clear();
