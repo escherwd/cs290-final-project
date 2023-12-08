@@ -62,19 +62,9 @@
                     Layout
                 </div>
                 <div class="pallette-grid">
-                    <button class="pallette-item">
-                        <img src="/images/icons8-square-48.png" alt="">
-                        <span>Wall</span>
-                    </button>
-                    <button class="pallette-item">
-                        <img src="/images/icons8-door-48.png" alt="">
-                        <span>Door</span>
-                    </button>
-                    <button class="pallette-item">
-                        <img src="/images/icons8-window-48.png" alt="">
-                        <span>Window</span>
-                    </button>
-
+                    {{#each layoutbuttons}}
+                        {{> layoutbuttons}}
+                    {{/each}}
                 </div>
                 <div class="toolbar-title border-top">
                     Objects
