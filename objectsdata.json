@@ -48,5 +48,10 @@
         "id": "create-pool-table",
         "url": "/SVGs/create-pool-table.svg",
         "description": "Pool Table"
+    },
+    {
+        "id": "create-sink",
+        "url": "/SVGs/create-sink.svg",
+        "description": "Sink"
     }
 ]

@@ -18,8 +18,17 @@ for(const element of palletteElements){ // adds event listeners to all layout an
     }
 }
 
+const menuSaveButton = document.getElementById("menu-save-button")
+menuSaveButton.addEventListener('click', saveButtonHandler)
+
 const resetButton = document.getElementById("reset-button")
 resetButton.addEventListener("click", resetButtonHandler)
+
+const pdfExportButton = document.getElementById("export-pdf-button")
+pdfExportButton.addEventListener("click", generatePDF)
+
+const jpegExportButton = document.getElementById("export-jpeg-button")
+jpegExportButton.addEventListener('click', exportJPEG , false)
 
 /* *********************************              Base Functionality             ******************************* */ 
 
@@ -148,6 +157,7 @@ function createObject(event){
 
 function saveButtonHandler() {
     // this might end up being too much
+
 }
 
 
@@ -157,16 +167,32 @@ function resetButtonHandler(event) {
 }
 
 function generatePDF() {
-    var element = document.getElementById("canvas-container"); // get canvas
-    element.style.width = '850px'; // width on page
-    element.style.height = '750px'; // height on page
-    var options = { // set options 
-        margin: .5,
-        filename: 'layoutschematic.pdf',
-        image: {type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 1},
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape', precision: '12'}
-    };
+   // Create a jsPDF instance
+   let pdf = new jsPDF({
+    orientation: 'landscape' // fits the orientation of the canvas better 
+    });
 
-    html2pdf().set(options).from(element).save(); // call function to export to pdf
+   // Get the canvas content as an image data URL
+   let imgData = canvas.toDataURL('image/png');
+
+    let scale = pdf.internal.pageSize.getWidth() / canvas.width; // scales so entire canvas content fits 
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width * scale, canvas.height * scale);
+
+   // Save the PDF with a specified filename
+   pdf.save('canvas.pdf');
+}
+
+function exportJPEG(event){
+    console.log('Downlaoding scan')
+    var a = document.createElement('a') // create anchor element 
+    var dataURL = canvas.toDataURL({ // get data URL as png img
+        format: 'png',
+        quality: 1,
+    })
+
+
+    a.href = dataURL // set href attribute 
+    a.download = 'layoutplan.png' // set download name 
+    a.click() // trigger click to start download
+    
 }
