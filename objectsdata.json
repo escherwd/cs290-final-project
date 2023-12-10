@@ -2,56 +2,67 @@
     {
         "id": "create-bed",
         "url": "/SVGs/create-bed.svg",
-        "description": "Bed"
+        "description": "Bed",
+        "scale": ".3"
     },
     {
         "id": "create-couch",
         "url": "/SVGs/create-couch.svg",
-        "description": "Couch"
+        "description": "Couch",
+        "scale": ".3"
     },
     {
         "id": "create-fridge",
         "url": "/SVGs/create-fridge.svg",
-        "description": "Fridge"
+        "description": "Fridge",
+        "scale": ".1"
     },
     {
         "id": "create-rug",
         "url": "/SVGs/create-rug.svg",
-        "description": "Rug"
+        "description": "Rug",
+        "scale": ".3"
     },
     {
         "id": "create-sofa",
         "url": "/SVGs/create-sofa.svg",
-        "description": "Sofa"
+        "description": "Sofa",
+        "scale": ".1"
     },
     {
         "id": "create-toilet",
         "url": "/SVGs/create-toilet.svg",
-        "description": "Toilet"
+        "description": "Toilet",
+        "scale": ".05"
     },
     {
         "id": "create-shower",
         "url": "/SVGs/create-shower.svg",
-        "description": "Shower"
+        "description": "Shower",
+        "scale": ".1"
     },
     {
         "id": "create-dumbell",
         "url": "/SVGs/create-dumbell.svg",
-        "description": "Dumbell"
+        "description": "Dumbell",
+        "scale": ".3"
     },
     {
         "id": "create-car",
         "url": "/SVGs/create-car.svg",
-        "description": "Car"
+        "description": "Car",
+        "scale": "4"
     },
     {
         "id": "create-pool-table",
         "url": "/SVGs/create-pool-table.svg",
-        "description": "Pool Table"
+        "description": "Pool Table",
+        "scale": ".2"
     },
     {
         "id": "create-sink",
         "url": "/SVGs/create-sink.svg",
-        "description": "Sink"
+        "description": "Sink",
+        "scale": ".05"
     }
 ]

@@ -18,8 +18,8 @@ for(const element of palletteElements){ // adds event listeners to all layout an
     }
 }
 
-const menuSaveButton = document.getElementById("menu-save-button")
-menuSaveButton.addEventListener('click', saveButtonHandler)
+// const menuSaveButton = document.getElementById("menu-save-button")
+// menuSaveButton.addEventListener('click', saveButtonHandler)
 
 const resetButton = document.getElementById("reset-button")
 resetButton.addEventListener("click", resetButtonHandler)
@@ -30,7 +30,7 @@ pdfExportButton.addEventListener("click", generatePDF)
 const jpegExportButton = document.getElementById("export-jpeg-button")
 jpegExportButton.addEventListener('click', exportJPEG , false)
 
-/* *********************************              Base Functionality             ******************************* */ 
+/* *********************************              Base Functionality / Object Prototypes            ******************************* */ 
 
 
 fabric.Object.prototype.transparentCorners = false; // no transparent corners
@@ -47,17 +47,6 @@ fabric.Object.prototype.controls.deleteControl = new fabric.Control({
     render: renderIcon(deleteImg),
     cornerSize: 24 
 });
-
-// fabric.Object.prototype.controls.cloneButton = new fabric.Control({
-//     x: -0.5,
-//     y: -0.5,
-//     offsetY: -16,
-//     offsetX: -16,
-//     cursorStyle: 'pointer',
-//     mouseUpHandler: cloneObject,
-//     render: renderIcon(clonedImg),
-//     cornerSize: 24
-// });
 
 function renderIcon(icon) {
     return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
@@ -77,64 +66,10 @@ function deleteObject(eventData, transform) {
     canvas.requestRenderAll();
 }
 
-// function cloneObject(eventData, transform) {
-//     var target = transform.target;
-//     var canvas = target.canvas;
-//     target.clone(function(cloned) {
-//         cloned.left += 10;
-//         cloned.top += 10;
-//         canvas.add(cloned);
-//     });
-// }
-
 /* *********************************      Tool Ribbon Place Implementation       ******************************* */ 
 
 
-// function deleteButtonHandler() {
-//     console.log("== deleteButtonHandler called")
-//     var activeObjects = canvas.getActiveObjects()
-//     console.log("== Check for active objects being registered: " + activeObjects);
-    
-//     canvas.renderAll();
-    
-// }
-
-
-
-// var floorButton = document.getElementById('create-floor');
-// floorButton.addEventListener('click', createFloor);
-
-// function createFloor() {
-
-
-//     // Create a resizable floor object
-//     var floor = new fabric.Rect({
-//     left: 100,
-//     top: 100,
-//     width: 200,
-//     height: 150,
-//     fill: 'lightgray',
-//     selectable: true,
-//     hasControls: true,
-//     hasBorders: true,
-//     lockScalingFlip: true,
-//     lockUniScaling: true,
-//     cornerSize: 10,
-//     transparentCorners: false,
-//     cornerStyle: 'circle',
-//     scalable: true,
-//     });
-
-//     // Add the floor object to the canvas
-//     canvas.add(floor);
-
-//     // Render the canvas
-//     canvas.renderAll();
-
-// }
-
-
-
+// None as of right now, no buttons are actually useful or implementable.
 
 
 /* *********************************      Insert Objects Implementation       ******************************* */ 
@@ -144,9 +79,11 @@ function createObject(event){
     var button = event.target.closest('button'); // checks if clicked element or it's closest ancestor is button
     if(button){
         var id = button.id
-        console.log("== event target id:" + id)
+        console.log("== object ID: ", id)
+        var scale = parseFloat(button.getAttribute('scale')) || .3 ;
         fabric.loadSVGFromURL('/SVGs/' + id + '.svg' ,function(object, options ) {
             var objectSVG = fabric.util.groupSVGElements(object, options);
+            objectSVG.scale(scale);
             canvas.add(objectSVG);
         })
     }
@@ -156,43 +93,40 @@ function createObject(event){
 /* *********************************            Menu Implementation              ******************************* */ 
 
 function saveButtonHandler() {
-    // this might end up being too much
+    // this might end up being too much, current work towards this is happening in storage.js 
 
 }
 
-
 function resetButtonHandler(event) {
-// Clears canvas entirely
+    // Clears canvas entirely
     canvas.clear();
 }
 
 function generatePDF() {
    // Create a jsPDF instance
-   let pdf = new jsPDF({
+    var pdf = new jsPDF({
     orientation: 'landscape' // fits the orientation of the canvas better 
     });
 
-   // Get the canvas content as an image data URL
-   let imgData = canvas.toDataURL('image/png');
+    // Get the canvas content as an image data URL
+    var imgData = canvas.toDataURL('image/png');
 
-    let scale = pdf.internal.pageSize.getWidth() / canvas.width; // scales so entire canvas content fits 
+    var scale = pdf.internal.pageSize.getWidth() / canvas.width; // scales so entire canvas content fits 
     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width * scale, canvas.height * scale);
 
-   // Save the PDF with a specified filename
-   pdf.save('canvas.pdf');
+    // Save the PDF with a specified filename
+    pdf.save('canvas.pdf');
 }
 
 function exportJPEG(event){
-    console.log('Downlaoding scan')
+    // Export canvas as JPEG
     var a = document.createElement('a') // create anchor element 
     var dataURL = canvas.toDataURL({ // get data URL as png img
-        format: 'png',
+        format: 'jpeg',
         quality: 1,
     })
-
-
     a.href = dataURL // set href attribute 
-    a.download = 'layoutplan.png' // set download name 
+    a.download = 'layoutplan.jpeg' // set download name 
     a.click() // trigger click to start download
     
 }

@@ -7,16 +7,25 @@
     {
     "url": "/images/icons8-door-48.png",
     "id": "create-door",
-    "description": "Door"
+    "description": "Door",
+    "scale": "1"
     },
     {
     "url": "/images/icons8-window-48.png",
     "id": "create-window",
-    "description": "Window"
+    "description": "Window",
+    "scale": ".2"
     },
     {
     "url":"/images/icons8-square-48.png",
-    "id": "create-floor",
-    "description": "Floor"
+    "id": "create-square-floor",
+    "description": "Square Floor",
+    "scale": "3"
+    },
+    {
+    "url":"/images/icons8-square-48.png",
+    "id": "create-rect-floor",
+    "description": "Rect Floor",
+    "scale": "1"
     }
 ]
