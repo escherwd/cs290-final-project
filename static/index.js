@@ -42,6 +42,9 @@ pdfExportButton.addEventListener("click", generatePDF)
 const jpegExportButton = document.getElementById("export-jpeg-button")
 jpegExportButton.addEventListener('click', exportJPEG , false)
 
+const createWallButton = document.getElementById("create-wall")
+createWallButton.addEventListener('click', drawWall )
+
 /* *********************************              Base Functionality / Object Prototypes            ******************************* */ 
 
 
@@ -86,25 +89,6 @@ function deleteObject(eventData, transform) {
 // None as of right now, no buttons are actually useful or implementable.
 
 
-/* *********************************      Insert Objects Implementation       ******************************* */ 
-
-
-function createObject(event){
-    var button = event.target.closest('button'); // checks if clicked element or it's closest ancestor is button
-    if(button){
-        var id = button.id
-        console.log("== object ID: ", id)
-        var scale = parseFloat(button.getAttribute('scale')) || .3 ;
-        fabric.loadSVGFromURL('/SVGs/' + id + '.svg' ,function(object, options ) {
-            var objectSVG = fabric.util.groupSVGElements(object, options);
-            objectSVG.scale(scale);
-            giveDimensions(objectSVG);
-            canvas.add(objectSVG);
-        })
-    }
-    
-}
-
 /* *********************************            Menu Implementation              ******************************* */ 
 
 function saveButtonHandler() {
@@ -146,6 +130,28 @@ function exportJPEG(event){
     
 }
 
+
+/* *********************************      Insert Objects Implementation       ******************************* */ 
+
+
+function createObject(event){
+    var button = event.target.closest('button'); // checks if clicked element or it's closest ancestor is button
+    if(button){
+        var id = button.id
+        console.log("== object ID: ", id)
+        var scale = parseFloat(button.getAttribute('scale')) || .3 ;
+        fabric.loadSVGFromURL('/SVGs/' + id + '.svg' ,function(object, options ) {
+            var objectSVG = fabric.util.groupSVGElements(object, options);
+            objectSVG.scale(scale);
+            giveDimensions(objectSVG);
+            canvas.add(objectSVG);
+        })
+    }
+    
+}
+
+
+
 /* Below is from Canvas_test */
 
 function scaleDimension(dim){
@@ -157,54 +163,54 @@ function scaleDimension(dim){
   }
   
 function giveDimensions(object){
-var width = object.getScaledWidth();
-var scaledWidth = scaleDimension(width)
-var height = object.getScaledHeight();
-var scaledHeight = scaleDimension(height);
-
-var widthDim = new fabric.Text(scaledWidth, {
-    fontSize: dimTextSize,
-    left: object.left + width/2,
-    top: object.top + height + 15,
-    selectable: false,
-})
-
-object.widthDim = widthDim;
-canvas.add(widthDim);
-
-var heightDim = new fabric.Text(scaledHeight, {
-    fontSize: dimTextSize, 
-    left: object.left - 15,
-    top: object.top + (height / 2),
-    angle: 90, 
-    selectable: false,
-})
-object.heightDim = heightDim;
-canvas.add(heightDim); 
-
-}
-  
-  function updateDimensions(object){
     var width = object.getScaledWidth();
     var scaledWidth = scaleDimension(width)
     var height = object.getScaledHeight();
     var scaledHeight = scaleDimension(height);
-   
+
+    var widthDim = new fabric.Text(scaledWidth, {
+        fontSize: dimTextSize,
+        left: object.left + width/2,
+        top: object.top + height + 15,
+        selectable: false,
+    })
+
+    object.widthDim = widthDim;
+    canvas.add(widthDim);
+
+    var heightDim = new fabric.Text(scaledHeight, {
+        fontSize: dimTextSize, 
+        left: object.left - 15,
+        top: object.top + (height / 2),
+        angle: 90, 
+        selectable: false,
+    })
+    object.heightDim = heightDim;
+    canvas.add(heightDim); 
+
+}
+  
+function updateDimensions(object){
+    var width = object.getScaledWidth();
+    var scaledWidth = scaleDimension(width)
+    var height = object.getScaledHeight();
+    var scaledHeight = scaleDimension(height);
+
     // width = width.toString();
     object.widthDim.set({
-      text: scaledWidth,
-      left: object.left + width/2,
-      top: object.top + height + 15,
+        text: scaledWidth,
+        left: object.left + width/2,
+        top: object.top + height + 15,
     })
-  
+
     object.heightDim.set({
-      text: scaledHeight, 
-      left: object.left - 15,
-      top: object.top + (height / 2),
+        text: scaledHeight, 
+        left: object.left - 15,
+        top: object.top + (height / 2),
     })
-  }
+}
   
-  function rotateDimensions(object){
+function rotateDimensions(object){
     var width = object.getScaledWidth();
     var scaledWidth = scaleDimension(width)
     var height = object.getScaledHeight();
@@ -235,9 +241,9 @@ canvas.add(heightDim);
       left: xh,
       angle: theta + 90, 
     })
-  }
+}
 
-  function drawWall(){
+function drawWall(){
     if (mode === modes.wall){
       mode = null;
     } else {
@@ -245,80 +251,81 @@ canvas.add(heightDim);
       firstWall = true;
     }
     console.log(mode);
-  }
+}
 
-  var prevCircle = null;
+var prevCircle = null;
 
 function lineMidpoint(line){
-  var x = (line.x1 + line.x2) /2;
-  var y = (line.y1 + line.y2) /2; 
-  return [x, y];
+    var x = (line.x1 + line.x2) /2;
+    var y = (line.y1 + line.y2) /2; 
+    return [x, y];
 }
+
 function lineLength(line){
-  var difX = Math.abs(line.x1 - line.x2);
-  var difY = Math.abs(line.y1 - line.y2); 
-  console.log("=difX: ", difX, difX**2, "=difY: ", difY)
-  var length = Math.sqrt(difX**2 + difY**2)
-  console.log("==Length: ", length);
-  length = length/ppi; 
-  return length;
+    var difX = Math.abs(line.x1 - line.x2);
+    var difY = Math.abs(line.y1 - line.y2); 
+    console.log("=difX: ", difX, difX**2, "=difY: ", difY)
+    var length = Math.sqrt(difX**2 + difY**2)
+    console.log("==Length: ", length);
+    length = length/ppi; 
+    return length;
 }
 
 function updateDimPos(line){
-  var midpoint = lineMidpoint(line);
-  var length = Math.round(lineLength(line));
-  length = length.toString();
-  length = length + '"'
-  line.dim.set({
+    var midpoint = lineMidpoint(line);
+    var length = Math.round(lineLength(line));
+    length = length.toString();
+    length = length + '"'
+    line.dim.set({
     left: midpoint[0],
     top: midpoint[1],
     text: length,
-  })
+    })
 }
 
 function linkCircle(e, circle, prevCircle){
-  console.log("linkCircle");
-  var line = new fabric.Line([
-    prevCircle.left + circle.radius, 
-    prevCircle.top + circle.radius,
-    circle.left + circle.radius,
-    circle.top + circle.radius,
-  ],{
-    fill: 'red',
-    stroke: 'red',
-    strokeWidth: '8',
-    selectable: false,
-    evented: false,
-  });
+    console.log("linkCircle");
+    var line = new fabric.Line([
+        prevCircle.left + circle.radius, 
+        prevCircle.top + circle.radius,
+        circle.left + circle.radius,
+        circle.top + circle.radius,
+    ],{
+        fill: 'red',
+        stroke: 'red',
+        strokeWidth: '8',
+        selectable: false,
+        evented: false,
+    });
 
-  var length = (((line.x1 + line.x2)/2)^2+((line.y1 + line.y2)/2)^2)^0.5
-  var midPoint = lineMidpoint(line);
+    var length = (((line.x1 + line.x2)/2)^2+((line.y1 + line.y2)/2)^2)^0.5
+    var midPoint = lineMidpoint(line);
 
-  console.log("==Midpoint", midPoint)
-  console.log('==Length: ', length);
+    console.log("==Midpoint", midPoint)
+    console.log('==Length: ', length);
 
-  var dim = new fabric.Text(length.toString(), {
-    fontSize: dimTextSize, 
-    left: midPoint[0],
-    top: midPoint[1],
-    selectable: false,
-  })
+    var dim = new fabric.Text(length.toString(), {
+        fontSize: dimTextSize, 
+        left: midPoint[0],
+        top: midPoint[1],
+        selectable: false,
+    })
 
-  // var lineGroup = new fabric.Group([line, dim],{
-  //   selectable: false,
+    // var lineGroup = new fabric.Group([line, dim],{
+    //   selectable: false,
 
-  // })
-  line.dim = dim;
-  updateDimPos(line);
-  // circle.lineTo = prevCircle.lineFrom;
-  prevCircle.lineFrom = line;
-  canvas.add(line);
-  canvas.add(line.dim);
-  // console.log(line.group);
-  // line.sendToBack(); 
-  circle.bringToFront();
-  prevCircle.bringToFront();
-  return line; 
+    // })
+    line.dim = dim;
+    updateDimPos(line);
+    // circle.lineTo = prevCircle.lineFrom;
+    prevCircle.lineFrom = line;
+    canvas.add(line);
+    canvas.add(line.dim);
+    // console.log(line.group);
+    // line.sendToBack(); 
+    circle.bringToFront();
+    prevCircle.bringToFront();
+    return line; 
 }
 
 function makeCircle(e, prevCircle){
@@ -327,12 +334,12 @@ function makeCircle(e, prevCircle){
     var x = pointer.x;
     var y = pointer.y;
     var circle = new fabric.Circle({
-      radius: radius,
-      top: y - radius,
-      left: x - radius,
-      strokeWidth: 3,
-      fill: '#fff',
-      stroke: '666',
+        radius: radius,
+        top: y - radius,
+        left: x - radius,
+        strokeWidth: 3,
+        fill: '#fff',
+        stroke: '666',
     })
     circle.hasControls = circle.hasBorders = false;
     circle.prev = prevCircle;
@@ -424,8 +431,7 @@ canvas.on('object:moving', (e) => {
     // updateDimensions(o); 
     rotateDimensions(o);
   }
-}
-)
+})
 
 canvas.on('object:scaling', (e) => {
   var o = e.target; 
