@@ -51,29 +51,92 @@ function createGrid(){
 }
 createGrid();
 
+function scaleDimension(dim){
+  var scaledDim = dim / ppi; 
+  scaledDim = scaledDim.toString();
+  scaledDim = Math.round(scaledDim);
+  scaledDim = scaledDim + '"';
+  return scaledDim; 
+}
+
 function giveDimensions(object){
   var width = object.getScaledWidth();
+  var scaledWidth = scaleDimension(width)
   var height = object.getScaledHeight();
+  var scaledHeight = scaleDimension(height);
 
-  var widthDim = new fabric.Text(width.toString(), {
+  var widthDim = new fabric.Text(scaledWidth, {
     fontSize: dimTextSize,
     left: object.left + width/2,
-    top: object.top + height,
+    top: object.top + height + 15,
+    selectable: false,
   })
 
   object.widthDim = widthDim;
   canvas.add(widthDim);
 
+  var heightDim = new fabric.Text(scaledHeight, {
+    fontSize: dimTextSize, 
+    left: object.left - 15,
+    top: object.top + (height / 2),
+    angle: 90, 
+    selectable: false,
+  })
+  object.heightDim = heightDim;
+  canvas.add(heightDim); 
+
 }
 
 function updateDimensions(object){
   var width = object.getScaledWidth();
-  var height = object.getScaledHeight(); 
+  var scaledWidth = scaleDimension(width)
+  var height = object.getScaledHeight();
+  var scaledHeight = scaleDimension(height);
+ 
+  // width = width.toString();
+  object.widthDim.set({
+    text: scaledWidth,
+    left: object.left + width/2,
+    top: object.top + height + 15,
+  })
+
+  object.heightDim.set({
+    text: scaledHeight, 
+    left: object.left - 15,
+    top: object.top + (height / 2),
+  })
+}
+
+function rotateDimensions(object){
+  var width = object.getScaledWidth();
+  var scaledWidth = scaleDimension(width)
+  var height = object.getScaledHeight();
+  var scaledHeight = scaleDimension(height);
+
+  var theta = object.angle;
+  var alpha = 90 - theta;
+  var thetaRads = theta * Math.PI/180;
+  var alphaRads = alpha * Math.PI/180;
+
+  var xw = object.left + (height + 15)* Math.sin(-thetaRads) + (width /2)* Math.sin(alphaRads); 
+  var yw = object.top + (height + 15) * Math.cos(-thetaRads) + (width /2) * Math.cos(alphaRads);
+  
+  var xh = object.left - ((height/2) * Math.sin(thetaRads) + 15 * Math.cos(thetaRads));
+  var yh = object.top + ((height/2) * Math.cos(thetaRads) - 15 * Math.sin(thetaRads)); 
+
   width = width.toString();
   object.widthDim.set({
-    text: width,
-    left: object.left + width/2,
-    top: object.top + height,
+    text: scaledWidth, 
+    top: yw,
+    left: xw,
+    angle: theta,
+  })
+
+  object.heightDim.set({
+    text: scaledHeight,
+    top: yh,
+    left: xh,
+    angle: theta + 90, 
   })
 }
 
@@ -101,6 +164,7 @@ fabric.loadSVGFromURL('./lib/svg/bed.svg', function(objects, options) {
   obj.scale(2);
   obj.left = 100;
   obj.top = 100;
+  giveDimensions(obj)
   console.log(obj)
   canvas.add(obj);
 });
@@ -122,6 +186,8 @@ function deleteObject(eventData, transform) {
     var target = transform.target;
     var canvas = target.canvas;
         canvas.remove(target);
+        canvas.remove(target.widthDim);
+        canvas.remove(target.heightDim);
     canvas.requestRenderAll();
 }
 
@@ -337,6 +403,7 @@ canvas.on('object:moving', (e) => {
     }
   } else if (o.type != null){
     // updateDimensions(o); 
+    rotateDimensions(o);
   }
 }
 )
@@ -344,10 +411,12 @@ canvas.on('object:moving', (e) => {
 canvas.on('object:scaling', (e) => {
   var o = e.target; 
   // updateDimensions(o);
+  rotateDimensions(o);
 })
 
 canvas.on('object:rotating', (e) => {
   // updateDimensions(e.target);
+  rotateDimensions(e.target);
 })
 
 function clearAll(){
