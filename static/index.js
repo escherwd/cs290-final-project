@@ -80,6 +80,7 @@ function renderIcon(icon) {
 }
 
 function deleteObject(eventData, transform) {
+    console.log(transform);
     var target = transform.target;
     var canvas = target.canvas;
     // if (target === )
@@ -100,10 +101,17 @@ function deleteSelectedObjects() {
     var selected = canvas.getActiveObjects();
     console.log("== selected: ", selected);
 
+    
     if (selected.length > 0) {
-        canvas.remove(...selected);
-        canvas.discardActiveObject();
-        canvas.requestRenderAll();
+        if (selected[0].type === 'wallNode'){
+            deleteWallNode(selected[0]);
+        } else {
+            canvas.remove(selected[0].widthDim); //selected gives an array. First element is the actual object,
+            canvas.remove(selected[0].heightDim); // Then access and remove the dimensions
+            canvas.remove(...selected);
+            canvas.discardActiveObject();
+            canvas.requestRenderAll();
+        }
     }
 }
 
@@ -377,7 +385,7 @@ function createEndpoint(e, prevCircle){
         fill: '#fff',
         stroke: '666',
         hasControls: false,
-        hasBorders: false,
+        hasBorders: true,
         type: 'wallNode',
     })
     circle.prev = prevCircle;
@@ -386,6 +394,21 @@ function createEndpoint(e, prevCircle){
     circle.lineTo = null;
     // canvas.add(circle);
     return circle;
+}
+
+function deleteWallNode(node){
+    var next = node.next; 
+    var prev = node.prev;
+
+    canvas.remove(node.lineTo);
+    canvas.remove(node.lineTo.dim);
+    canvas.remove(node.lineFrom);
+    canvas.remove(node.lineFrom.dim);
+    canvas.remove(node);
+
+    prev.next = next;
+    next.prev = prev;
+    createWall(next, prev);
 }
 
 canvas.on('mouse:up', (e) => {
