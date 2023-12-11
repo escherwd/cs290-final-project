@@ -400,15 +400,21 @@ function deleteWallNode(node){
     var next = node.next; 
     var prev = node.prev;
 
-    canvas.remove(node.lineTo);
-    canvas.remove(node.lineTo.dim);
-    canvas.remove(node.lineFrom);
-    canvas.remove(node.lineFrom.dim);
+    if (node.lineTo){
+        canvas.remove(node.lineTo);
+        canvas.remove(node.lineTo.dim);
+    }
+    if (node.lineFrom){
+        canvas.remove(node.lineFrom);
+        canvas.remove(node.lineFrom.dim);
+    }
     canvas.remove(node);
 
     prev.next = next;
     next.prev = prev;
-    createWall(next, prev);
+    if (next != prev){
+        createWall(next, prev);
+    }
 }
 
 canvas.on('mouse:up', (e) => {
