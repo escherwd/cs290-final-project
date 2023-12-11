@@ -425,7 +425,9 @@ canvas.on('mouse:up', (e) => {
             } else if (e.target.prev === null){
                 var line = createWall(e.target, prevCircle);
                 e.target.lineTo = line; 
+                e.target.prev = prevCircle;
                 prevCircle.lineFrom = line;
+                prevCircle.next = e.target;
                 firstWall = true;
             } else if (e.target.next === null){
                 // var line = createWall(e.target, prevCircle);
