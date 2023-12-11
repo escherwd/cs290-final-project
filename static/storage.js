@@ -35,7 +35,8 @@ saveCommitButton.addEventListener('click', async (event) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ 'bruh': 234234 }),
+            // body: JSON.stringify({ 'bruh': 234234 }),
+            body: exportCanvasJSON(),
         });
 
         // Redirect to new project if renaming

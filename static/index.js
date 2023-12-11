@@ -618,6 +618,11 @@ canvas.on('object:rotating', (e) => {
     rotateDimensions(e.target);
 })
 
+function exportCanvasJSON(){
+    var canvasJSON = JSON.stringify(canvas.toJSON());
+    return canvasJSON;
+}
+
 // var testLine = new fabric.Line([
 //     100, 100, 400, 400], {
 //         strokeWidth: '10',
