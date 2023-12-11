@@ -45,6 +45,9 @@ jpegExportButton.addEventListener('click', exportJPEG , false)
 const createWallButton = document.getElementById("create-wall")
 createWallButton.addEventListener('click', drawWall )
 
+const deleteButton = document.getElementById("tool-delete-button")
+deleteButton.addEventListener('click' , deleteSelectedObjects)
+
 /* *********************************              Base Functionality / Object Prototypes            ******************************* */ 
 
 
@@ -87,6 +90,19 @@ function deleteObject(eventData, transform) {
 
 
 // None as of right now, no buttons are actually useful or implementable.
+
+
+function deleteSelectedObjects() {
+    console.log("== deleteSelectedObjects called");
+    var selected = canvas.getActiveObjects();
+    console.log("== selected: ", selected);
+
+    if (selected.length > 0) {
+        canvas.remove(...selected);
+        canvas.discardActiveObject();
+        canvas.requestRenderAll();
+    }
+}
 
 
 /* *********************************            Menu Implementation              ******************************* */ 
