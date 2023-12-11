@@ -1,8 +1,10 @@
 /* *********************************      Global Definitions       ******************************* */ 
 
-const canvas = new fabric.Canvas('canvas2'); // Reference to canvas element
+const canvas = new fabric.Canvas('c'); // Reference to canvas element
 var deleteIcon = "/SVGs/delete-button.svg"
 var cloneIcon =  "/SVGs/copy-button.svg"
+
+canvas.selection = false;
 
 var deleteImg = document.createElement('img');
 deleteImg.src = deleteIcon;
@@ -11,7 +13,7 @@ var clonedImg = document.createElement('img');
 cloneIcon.src = cloneIcon;
 
 // For adding dimensions to objects and walls
-var ppi = 5 // Pixles per inch
+var ppi = 4 // Pixles per inch
 var dimTextSize = 10;
 
 var firstWall = true; 
@@ -74,6 +76,7 @@ function renderIcon(icon) {
 function deleteObject(eventData, transform) {
     var target = transform.target;
     var canvas = target.canvas;
+    // if (target === )
     canvas.remove(target);
     canvas.remove(target.widthDim);
     canvas.remove(target.heightDim);
@@ -94,13 +97,20 @@ function createObject(event){
     if(button){
         var id = button.id
         console.log("== object ID: ", id)
-        var scale = parseFloat(button.getAttribute('scale')) || .3 ;
-        fabric.loadSVGFromURL('/SVGs/' + id + '.svg' ,function(object, options ) {
+        if (id === "create-wall"){
+            drawWall();
+        } else {
+            mode = null;
+            var scale = parseFloat(button.getAttribute('scale')) || .3 ;
+            fabric.loadSVGFromURL('/SVGs/' + id + '.svg' ,function(object, options ) {
             var objectSVG = fabric.util.groupSVGElements(object, options);
             objectSVG.scale(scale);
             giveDimensions(objectSVG);
+            objectSVG.top = 100; 
+            objectSVG.left = 100;
             canvas.add(objectSVG);
         })
+        }
     }
     
 }
@@ -276,19 +286,121 @@ function updateDimPos(line){
   })
 }
 
+function createWall(circle, prevCircle){
+    console.log('***Creating wall');
+    var line = new fabric.Line(
+        [
+            prevCircle.left + circle.radius, 
+            prevCircle.top + circle.radius,
+            circle.left + circle.radius, 
+            circle.top + circle.radius
+        ] , {
+            fill: 'black',
+            stroke: 'black',
+            strokeWidth: '8',
+            selectable: false,
+            // evented: false, 
+        }
+    )
+    line.length = lineLength(line);
+    line.midpoint = lineMidpoint(line);
+    line.dim = new fabric.Text(length.toString(), {
+        fontSize: dimTextSize, 
+        left: line.midpoint[0],
+        top: line.midpoint[1],
+        selectable: false,
+        backgroundColor: 'white',
+        borderColor: 'red',
+      })
+    prevCircle.lineFrom = line;
+    circle.lineTo = line; 
+    canvas.add(line);
+    canvas.add(line.dim);
+    updateDimPos(line);
+    circle.bringToFront();
+    prevCircle.bringToFront();
+    console.log("New Wall: ", line);
+    return line;
+}
+
+function createEndpoint(e, prevCircle){
+    console.log('***Creating endpoint')
+    var radius = 8;
+    var x = e.pointer.x;
+    var y = e.pointer.y;
+    var circle = new fabric.Circle({
+        radius: radius,
+        top: y - radius,
+        left: x - radius,
+        strokeWidth: 3,
+        fill: '#fff',
+        stroke: '666',
+        hasControls: false,
+        hasBorders: false,
+        type: 'wallNode',
+    })
+    circle.prev = prevCircle;
+    circle.next = null;
+    circle.lineFrom = null;
+    circle.lineTo = null;
+    // canvas.add(circle);
+    return circle;
+}
+
+canvas.on('mouse:up', (e) => {
+    console.log('==Target: ', e.target);
+    if (mode === modes.wall){
+        if (firstWall === true){
+            prevCircle = null;
+        }
+
+        var circle = createEndpoint(e, prevCircle);
+        if(e.target != null && e.target.type === 'wallNode'){
+            if (firstWall === true){
+                // Do nothing here but don't want to do the next in this if else chain
+            } else if (e.target.prev === null){
+                var line = createWall(e.target, prevCircle);
+                e.target.lineTo = line; 
+                prevCircle.lineFrom = line;
+                firstWall = true;
+            } else if (e.target.next === null){
+                // var line = createWall(e.target, prevCircle);
+                // e.target.lineFrom = line;
+            }
+        } else if (prevCircle != null){
+            console.log('***Prev not null: ', prevCircle);
+            prevCircle.next = circle;
+            canvas.add(circle);
+            createWall(circle, prevCircle);
+            prevCircle = circle; 
+            firstWall = false; 
+        } else {
+            console.log("prev is null", prevCircle);
+            canvas.add(circle);
+            prevCircle = circle;
+            firstWall = false;
+        }
+    }
+})
+
 function linkCircle(e, circle, prevCircle){
   console.log("linkCircle");
-  var line = new fabric.Line([
+  var line = new fabric.Line(
+    [
     prevCircle.left + circle.radius, 
     prevCircle.top + circle.radius,
     circle.left + circle.radius,
     circle.top + circle.radius,
-  ],{
-    fill: 'red',
-    stroke: 'red',
+  ]
+// [prevCircle.left, prevCircle.top, circle.left, circle.top]
+  ,{
+    fill: 'black',
+    stroke: 'black',
     strokeWidth: '8',
     selectable: false,
     evented: false,
+    left: prevCircle.left,
+    top: prevCircle.top, 
   });
 
   var length = (((line.x1 + line.x2)/2)^2+((line.y1 + line.y2)/2)^2)^0.5
@@ -343,97 +455,124 @@ function makeCircle(e, prevCircle){
 
 }
 
-canvas.on('mouse:up', (e) => {
-  console.log(e);
-  console.log("target: ", e.target);
-  if (e.target){console.log("type: ", e.target.type)}
-  if (mode === modes.wall){
-    console.log("==firstWall: ", firstWall)
-    if (firstWall === true){
-      prevCircle = null;
-    } 
+// canvas.on('mouse:up', (e) => {
+//   console.log(e);
+//   console.log("target: ", e.target);
+//   if (e.target){console.log("type: ", e.target.type)}
+//   if (mode === modes.wall){
+//     console.log("==firstWall: ", firstWall)
+//     if (firstWall === true){
+//       prevCircle = null;
+//     } 
 
-    // Do I just need to make it so you can only ever have one set of lines
-    // Like you can't connect more lines you just have to add to what you already have?
+//     // Do I just need to make it so you can only ever have one set of lines
+//     // Like you can't connect more lines you just have to add to what you already have?
 
-    // drawEndpoint(e);
-    var x = e.pointer.x;
-    var y = e.pointer.y;
-    console.log("x: ", x, "y: ", y);
-    console.log(prevCircle);
-    var circle = makeCircle(e, prevCircle);
+//     // drawEndpoint(e);
+//     var x = e.pointer.x;
+//     var y = e.pointer.y;
+//     console.log("x: ", x, "y: ", y);
+//     console.log(prevCircle);
+//     var circle = makeCircle(e, prevCircle);
 
-    if(e.target != null && e.target.type === 'circle'){
-      // var line = linkCircle(e, prevCircle, e.target);
-      // e.target.lineTo = line;
-      // var line = linkCircle(e, e.target, prevCircle);
-      if (firstWall === true){
-        // var line = linkCircle(e, e.target, circle);
-        // prevCircle = e.target;
-        // prevCircle.lineTo = prevCircle.lineFrom;
-      } else {
-        var line = linkCircle(e, e.target, prevCircle);
-        e.target.lineTo = line;
-        prevCircle.lineFrom = line; 
-      }
-    } else if (prevCircle != null){
-      prevCircle.next = circle
-      var line = linkCircle(e, circle, prevCircle);
-      circle.lineTo = line; 
-      prevCircle.lineFrom = line;
-      prevCircle = circle; 
-      // firstWall = false;
-      canvas.add(circle);
-      // var line = linkCircle(e, circle, prevCircle);
-      // circle.lineTo = line;
-      // prevCircle.lineFrom = line; 
-    } else {
-      console.log("prevCircle: ", prevCircle);
-      prevCircle = circle;
-      console.log(circle);
-      canvas.add(circle);
-    }
-    firstWall = false;
-    // canvas.preserveObjectStacking = false;
-    // circle.bringToFront();
-    // canvas.preserveObjectStacking = true;
-    // canvas.bringToFront(circle);
-    canvas.renderAll();
-  }
-})
+//     if(e.target != null && e.target.type === 'circle'){
+//       // var line = linkCircle(e, prevCircle, e.target);
+//       // e.target.lineTo = line;
+//       // var line = linkCircle(e, e.target, prevCircle);
+//       if (firstWall === true){
+//         // var line = linkCircle(e, e.target, circle);
+//         // prevCircle = e.target;
+//         // prevCircle.lineTo = prevCircle.lineFrom;
+//       } else {
+//         // var line = linkCircle(e, e.target, prevCircle);
+//         var line = createWall(e.target, prevCircle);
+//         e.target.lineTo = line;
+//         prevCircle.lineFrom = line; 
+//       }
+//     } else if (prevCircle != null){
+//         prevCircle.next = circle
+//         //   var line = linkCircle(e, circle, prevCircle);
+//         var line = createWall(circle, prevCircle);
+//         circle.lineTo = line; 
+//         prevCircle.lineFrom = line;
+//         prevCircle = circle; 
+//         // firstWall = false;
+//         canvas.add(circle);
+//         // var line = linkCircle(e, circle, prevCircle);
+//         // circle.lineTo = line;
+//         // prevCircle.lineFrom = line; 
+//     } else {
+//         console.log("prevCircle: ", prevCircle);
+//         prevCircle = circle;
+//         console.log(circle);
+//         canvas.add(circle);
+//     }
+//     firstWall = false;
+//     // canvas.preserveObjectStacking = false;
+//     // circle.bringToFront();
+//     // canvas.preserveObjectStacking = true;
+//     canvas.bringToFront(prevCircle);
+//     canvas.bringToFront(circle);
+//     canvas.renderAll();
+//   }
+// })
 
 
 
 canvas.on('object:moving', (e) => {
   var o = e.target;
   console.log("Dragging Object:", o)
-  if (o.type != null && o.type === 'circle'){
+
+  if (o.type != null && o.type === 'wallNode'){
     console.log("___Dragging Circle");
     var radius = o.radius;
     if (o.lineTo != null){
-      console.log("Setting lineTo end");
-      o.lineTo.set({'x2': o.left + radius, 'y2': o.top + radius})
-      updateDimPos(o.lineTo)
+        console.log("Setting lineTo end");
+        o.lineTo.set({'x2': (o.left + radius), 'y2': (o.top + radius)})
+        console.log("passedValue: ",o.left+radius, "actual: ", o.lineTo.x2)
+        updateDimPos(o.lineTo)
     }
     if (o.lineFrom != null){
       console.log("Setting lineFrom end")
-      o.lineFrom.set({'x1': o.left + radius, 'y1': o.top + radius})
+      o.lineFrom.set({'x1': (o.left + radius), 'y1': (o.top + radius)})
       updateDimPos(o.lineFrom)
     }
   } else if (o.type != null){
-    // updateDimensions(o); 
-    rotateDimensions(o);
+        rotateDimensions(o);
   }
 }
 )
 
 canvas.on('object:scaling', (e) => {
-  var o = e.target; 
-  // updateDimensions(o);
-  rotateDimensions(o);
+    var o = e.target; 
+    rotateDimensions(o);
 })
 
 canvas.on('object:rotating', (e) => {
-  // updateDimensions(e.target);
-  rotateDimensions(e.target);
+    rotateDimensions(e.target);
 })
+
+// var testLine = new fabric.Line([
+//     100, 100, 400, 400], {
+//         strokeWidth: '10',
+//         fill: 'black',
+//         stroke: 'black',
+//     })
+
+// canvas.add(testLine)
+// canvas.bringToFront(testLine)
+// console.log(testLine)
+// canvas.renderAll()
+
+// var rect = new fabric.Rect({
+//     left: 100,
+//     top: 50,
+//     fill: 'yellow',
+//     width: 200,
+//     height: 100,
+//     objectCaching: false,
+//     stroke: 'lightgreen',
+//     strokeWidth: 9,
+//   });
+
+// canvas.add(rect)
