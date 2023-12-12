@@ -459,3 +459,21 @@ body {
 .save-modal-save:hover {
     background: #15803d;
 }
+
+#page-of-404-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+#page-of-404-header {
+    font-size: 150px;
+}
+
+#page-of-404-script {
+    font-size: 100px;
+}
+
+.page-of-404 {
+    margin-top: 100px;
+    text-align: center;
+}
